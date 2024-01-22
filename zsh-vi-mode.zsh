@@ -684,6 +684,7 @@ function zvm_backward_kill_region() {
 
   bpos=$bpos+1
   CUTBUFFER=${BUFFER:$bpos:$((epos-bpos))}
+  echo "$CUTBUFFER" | pbcopy
   BUFFER="${BUFFER:0:$bpos}${BUFFER:$epos}"
   CURSOR=$bpos
 }
@@ -706,6 +707,7 @@ function zvm_kill_line() {
   local ret=($(zvm_calc_selection $ZVM_MODE_VISUAL_LINE))
   local bpos=${ret[1]} epos=${ret[2]}
   CUTBUFFER=${BUFFER:$bpos:$((epos-bpos))}$'\n'
+  echo "$CUTBUFFER" | pbcopy
   BUFFER="${BUFFER:0:$bpos}${BUFFER:$epos}"
   CURSOR=$bpos
 }
@@ -715,6 +717,7 @@ function zvm_kill_whole_line() {
   local ret=($(zvm_calc_selection $ZVM_MODE_VISUAL_LINE))
   local bpos=$ret[1] epos=$ret[2] cpos=$ret[3]
   CUTBUFFER=${BUFFER:$bpos:$((epos-bpos))}$'\n'
+  echo "$CUTBUFFER" | pbcopy
 
   # Adjust region range of deletion
   if (( $epos < $#BUFFER )); then
@@ -1040,6 +1043,7 @@ function zvm_yank() {
   if [[ ${1:-$ZVM_MODE} == $ZVM_MODE_VISUAL_LINE ]]; then
     CUTBUFFER=${CUTBUFFER}$'\n'
   fi
+  echo "$CUTBUFFER" | pbcopy
   CURSOR=$bpos MARK=$epos
 }
 
@@ -1086,6 +1090,7 @@ function zvm_vi_yank() {
 # Put cutbuffer after the cursor
 function zvm_vi_put_after() {
   local head= foot=
+  CUTBUFFER="$(pbpaste)"
   local content=${CUTBUFFER}
   local offset=1
 
@@ -1138,6 +1143,7 @@ function zvm_vi_put_after() {
 # Put cutbuffer before the cursor
 function zvm_vi_put_before() {
   local head= foot=
+  CUTBUFFER="$(pbpaste)"
   local content=${CUTBUFFER}
 
   if [[ ${content: -1} == $'\n' ]]; then
@@ -1199,6 +1205,7 @@ function zvm_replace_selection() {
     CUTBUFFER=${CUTBUFFER}$'\n'
   fi
 
+  echo "$CUTBUFFER" | pbcopy
   BUFFER="${BUFFER:0:$bpos}${cutbuf}${BUFFER:$epos}"
   CURSOR=$cpos
 }
@@ -1227,6 +1234,7 @@ function zvm_vi_change() {
     CUTBUFFER=${CUTBUFFER}$'\n'
   fi
 
+  echo "$CUTBUFFER" | pbcopy
   BUFFER="${BUFFER:0:$bpos}${BUFFER:$epos}"
   CURSOR=$bpos
 
@@ -1270,6 +1278,7 @@ function zvm_vi_change_eol() {
   done
 
   CUTBUFFER=${BUFFER:$bpos:$((epos-bpos))}
+  echo "$CUTBUFFER" | pbcopy
   BUFFER="${BUFFER:0:$bpos}${BUFFER:$epos}"
 
   zvm_reset_repeat_commands $ZVM_MODE c 0 $#CUTBUFFER
@@ -2133,6 +2142,7 @@ function zvm_change_surround_text_object() {
     ((epos++))
   fi
   CUTBUFFER=${BUFFER:$bpos:$(($epos-$bpos))}
+  echo "$CUTBUFFER" | pbcopy
   case ${action:0:1} in
     c)
       BUFFER="${BUFFER:0:$bpos}${BUFFER:$epos}"
