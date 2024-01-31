@@ -1212,6 +1212,7 @@ function zvm_replace_selection() {
 
 # Replace characters of the visual selection
 function zvm_vi_replace_selection() {
+  CUTBUFFER="$(pbpaste)"
   zvm_replace_selection $CUTBUFFER
   zvm_exit_visual_mode ${1:-true}
 }
