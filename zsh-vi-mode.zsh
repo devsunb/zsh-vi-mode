@@ -1515,8 +1515,6 @@ function zvm_navigation_handler() {
       ' ') cmd=(zle vi-forward-char);;
       '0') cmd=(zle vi-digit-or-beginning-of-line);;
       'h') cmd=(zle vi-backward-char);;
-      'j') cmd=(zle down-line-or-history);;
-      'k') cmd=(zle up-line-or-history);;
       'l') cmd=(zle vi-forward-char);;
       'w') cmd=(zle vi-forward-word);;
       'W') cmd=(zle vi-forward-blank-word);;
@@ -3477,12 +3475,6 @@ function zvm_init() {
   zvm_bindkey vicmd '^[[F'  end-of-line
   zvm_bindkey viins '^[[3~' delete-char
   zvm_bindkey vicmd '^[[3~' delete-char
-
-  # History search
-  zvm_bindkey viins '^R' history-incremental-search-backward
-  zvm_bindkey viins '^S' history-incremental-search-forward
-  zvm_bindkey viins '^P' up-line-or-history
-  zvm_bindkey viins '^N' down-line-or-history
 
   # Insert mode
   zvm_bindkey vicmd 'i'  zvm_enter_insert_mode
